@@ -1326,8 +1326,6 @@ class WhisperGenerationMixin:
         else:
             languages = [language]  # Use a length-1 list now, broadcast later
 
-        # Separate init_tokens for each language
-        init_tokens = [copy.copy(init_tokens) for _ in languages]
 
         # Update init_tokens with languages
         lang_ids = None
@@ -1341,6 +1339,10 @@ class WhisperGenerationMixin:
                 generation_config=generation_config,
                 num_segment_frames=num_segment_frames,
             ).tolist()
+
+        # Separate init_tokens for each language id
+        init_tokens = [copy.copy(init_tokens) for _ in lang_ids]
+
         if lang_ids is not None:
             # append or replace lang_ids to init_tokens
             for i in range(len(init_tokens)):
